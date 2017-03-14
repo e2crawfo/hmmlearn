@@ -20,10 +20,11 @@ def normalize(a, axis=None):
     a_sum = a.sum(axis)
     if axis and a.ndim > 1:
         # Make sure we don't divide by zero.
-        a_sum[a_sum == 0] = 1
         shape = list(a.shape)
         shape[axis] = 1
         a_sum.shape = shape
+        a += (a_sum == 0).astype(a.dtype)
+        a_sum[a_sum == 0] = a.shape[axis]
 
     a /= a_sum
 
